@@ -8,6 +8,7 @@ const initialTasks = [
 function App() {
   const [tasks, setTasks] = useState(initialTasks);
   const [newTask, setNewTask] = useState("");
+  const [filter, setFilter] = useState("all");
 
   const toggleComplete = (id) => {
     const modTask = tasks.map((task) =>
@@ -36,10 +37,15 @@ function App() {
     setTasks(tasks.filter((task) => task.id !== id));
   };
 
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "completed") return task.completed;
+    if (filter === "pending") return !task.completed;
+    return true;
+  });
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="mx-auto max-w-xl rounded-xl bg-white p-6 shadow-md">
-        <h1 className="mb-4 text-center text-2xl font-bold">📝 Task Manager</h1>
+        <h1 className="mb-4 text-center text-2xl font-bold">Task Manager</h1>
 
         <div className="mb-4 flex gap-2">
           <input
@@ -58,18 +64,22 @@ function App() {
         </div>
 
         <div className="mb-4 flex justify-center gap-3">
-          <button className="rounded bg-blue-600 px-4 py-1 text-white">
-            All
-          </button>
-          <button className="rounded bg-gray-200 px-4 py-1 text-gray-700">
-            Completed
-          </button>
-          <button className="rounded bg-gray-200 px-4 py-1 text-gray-700">
-            Pending
-          </button>
+          {["all", "completed", "pending"].map((filterTag) => (
+            <button
+              key={filterTag}
+              onClick={() => setFilter(filterTag)}
+              className={`rounded px-4 py-1 ${
+                filter === filterTag
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              {filterTag.charAt(0).toUpperCase() + filterTag.slice(1)}
+            </button>
+          ))}
         </div>
         <ul className="space-y-2">
-          {tasks.map((task) => (
+          {filteredTasks.map((task) => (
             <li
               key={task.id}
               className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 shadow"
