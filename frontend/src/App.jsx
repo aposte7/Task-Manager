@@ -27,6 +27,33 @@ function App() {
             Pending
           </button>
         </div>
+        <ul className="space-y-2">
+          <li className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 shadow">
+            <div className="flex flex-1 items-center gap-3">
+              <input
+                type="checkbox"
+                className="h-4 w-4 text-green-600"
+                disabled
+              />
+
+              <span className="text-gray-400 line-through">Read a book</span>
+            </div>
+            <button className="text-red-500">❌</button>
+          </li>
+
+          <li className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 shadow">
+            <div className="flex flex-1 items-center gap-3">
+              <input
+                type="checkbox"
+                className="h-4 w-4 text-green-600"
+                disabled
+              />
+
+              <span>Buy groceries</span>
+            </div>
+            <button className="text-red-500">❌</button>
+          </li>
+        </ul>
       </div>
     </div>
   );
