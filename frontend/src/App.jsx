@@ -7,12 +7,29 @@ const initialTasks = [
 
 function App() {
   const [tasks, setTasks] = useState(initialTasks);
+  const [newTask, setNewTask] = useState("");
 
   const toggleComplete = (id) => {
     const modTask = tasks.map((task) =>
       task.id === id ? { ...task, completed: !task.completed } : task,
     );
     setTasks(modTask);
+  };
+  const addTask = () => {
+    const trimmed = newTask.trim();
+    if (!trimmed) {
+      alert("Task title cannot be empty.");
+      return;
+    }
+
+    const newEntry = {
+      id: Date.now(),
+      title: trimmed,
+      completed: false,
+    };
+
+    setTasks([newEntry, ...tasks]);
+    setNewTask("");
   };
 
   const deleteTask = (id) => {
@@ -26,12 +43,16 @@ function App() {
 
         <div className="mb-4 flex gap-2">
           <input
-            type="text"
             className="flex-1 rounded border border-gray-300 p-2"
+            type="text"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
             placeholder="Enter a task..."
-            disabled
           />
-          <button className="rounded bg-blue-500 px-4 py-2 text-white" disabled>
+          <button
+            onClick={addTask}
+            className="rounded bg-blue-500 px-4 py-2 text-white"
+          >
             Add
           </button>
         </div>
@@ -55,6 +76,7 @@ function App() {
             >
               <div className="flex flex-1 items-center gap-3">
                 <input
+                  checked={task.completed}
                   onChange={() => toggleComplete(task.id)}
                   type="checkbox"
                   className="h-4 w-4 text-green-600"
