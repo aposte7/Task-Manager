@@ -1,4 +1,24 @@
+import { useState } from "react";
+
+const initialTasks = [
+  { id: 1, title: "Develop Task Manager App", completed: false },
+  { id: 2, title: "Refactor Project", completed: true },
+];
+
 function App() {
+  const [tasks, setTasks] = useState(initialTasks);
+
+  const toggleComplete = (id) => {
+    const modTask = tasks.map((task) =>
+      task.id === id ? { ...task, completed: !task.completed } : task,
+    );
+    setTasks(modTask);
+  };
+
+  const deleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id));
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="mx-auto max-w-xl rounded-xl bg-white p-6 shadow-md">
@@ -28,31 +48,32 @@ function App() {
           </button>
         </div>
         <ul className="space-y-2">
-          <li className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 shadow">
-            <div className="flex flex-1 items-center gap-3">
-              <input
-                type="checkbox"
-                className="h-4 w-4 text-green-600"
-                disabled
-              />
+          {tasks.map((task) => (
+            <li
+              key={task.id}
+              className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 shadow"
+            >
+              <div className="flex flex-1 items-center gap-3">
+                <input
+                  onChange={() => toggleComplete(task.id)}
+                  type="checkbox"
+                  className="h-4 w-4 text-green-600"
+                />
 
-              <span className="text-gray-400 line-through">Read a book</span>
-            </div>
-            <button className="text-red-500">❌</button>
-          </li>
-
-          <li className="flex items-center justify-between rounded bg-gray-50 px-4 py-2 shadow">
-            <div className="flex flex-1 items-center gap-3">
-              <input
-                type="checkbox"
-                className="h-4 w-4 text-green-600"
-                disabled
-              />
-
-              <span>Buy groceries</span>
-            </div>
-            <button className="text-red-500">❌</button>
-          </li>
+                <span
+                  className={`${task.completed ? "text-gray-400 line-through" : ""}`}
+                >
+                  {task.title}
+                </span>
+              </div>
+              <button
+                className="text-red-500"
+                onClick={() => deleteTask(task.id)}
+              >
+                ❌
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
