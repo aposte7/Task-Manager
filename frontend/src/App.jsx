@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "./components/Button";
 
 const initialTasks = [
   { id: 1, title: "Develop Task Manager App", completed: false },
@@ -38,10 +39,17 @@ function App() {
   };
 
   const filteredTasks = tasks.filter((task) => {
-    if (filter === "completed") return task.completed;
-    if (filter === "pending") return !task.completed;
+    if (filter.toLocaleLowerCase() === "completed") return task.completed;
+    if (filter.toLocaleLowerCase() === "pending") return !task.completed;
     return true;
   });
+
+  const filters = [
+    { id: 1, title: "All" },
+    { id: 2, title: "Completed" },
+    { id: 3, title: "Pending" },
+  ];
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="mx-auto max-w-xl rounded-xl bg-white p-6 shadow-md">
@@ -64,18 +72,17 @@ function App() {
         </div>
 
         <div className="mb-4 flex justify-center gap-3">
-          {["all", "completed", "pending"].map((filterTag) => (
-            <button
-              key={filterTag}
-              onClick={() => setFilter(filterTag)}
-              className={`rounded px-4 py-1 ${
-                filter === filterTag
+          {filters.map((tagType) => (
+            <Button
+              key={tagType.id}
+              tagType={tagType}
+              style={
+                filter.toLowerCase() === tagType.title.toLowerCase()
                   ? "bg-blue-600 text-white"
                   : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              {filterTag.charAt(0).toUpperCase() + filterTag.slice(1)}
-            </button>
+              }
+              handleClick={setFilter}
+            />
           ))}
         </div>
         <ul className="space-y-2">
